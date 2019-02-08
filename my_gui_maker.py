@@ -112,9 +112,9 @@ class My_Frame(Frame):
     radios=[]
     def radio_button(self,list_options,rows,columns,radio_comm=None):
         self.var=IntVar()
-        val=1
+        val=0
         self.radio_comm=None
-        for val, list_option in enumerate(list_options, start=1):
+        for val, list_option in enumerate(list_options, start=0):
             self.the_radio=Radiobutton(self,text=list_option,pady = ypad,bg='red',command=radio_comm,variable=self.var,value=val)
             self.the_radio.grid(row=rows,column=columns,columnspan=1,sticky=W)
             self.radios.append(self.the_radio)
@@ -134,7 +134,7 @@ class My_Frame(Frame):
     def the_tree(self,rows,columns,df):
 
         head_cols=tuple(df.columns.tolist())
-        self.my_tree=ttk.Treeview(self,columns=head_cols)
+        self.my_tree=ttk.Treeview(self, height=10,columns=head_cols)
         self.my_tree.bind("<Double-1>", self.OnDoubleClick)
         self.tree_list.append(self.my_tree)
         
@@ -159,13 +159,16 @@ class My_Frame(Frame):
         
         yscrollbar = ttk.Scrollbar(self, orient='vertical', command=self.my_tree.yview)
         xscrollbar = ttk.Scrollbar(self, orient='horizontal', command=self.my_tree.xview)
-        self.my_tree['yscroll'] = yscrollbar.set
-        self.my_tree['xscroll'] = xscrollbar.set
+##        self.my_tree['yscroll'] = yscrollbar.set
+##        self.my_tree['xscroll'] = xscrollbar.set
 
-        self.my_tree.grid(row=rows,column=columns,sticky=W,columnspan=2)
+        self.my_tree.grid(row=rows,column=columns,sticky=W)
 
-        yscrollbar.grid(row=rows, column=columns+1, sticky='ns',in_=self.the_frame)
-        xscrollbar.grid(row=rows+1, column=columns, sticky='we',in_=self.the_frame)
+##        yscrollbar.grid(row=rows, column=columns+1, sticky='ns',in_=self.the_frame)
+##        xscrollbar.grid(row=rows+1, column=columns, sticky='we',in_=self.the_frame)
+
+        yscrollbar.grid(row=rows, column=columns+1, sticky='ns')
+        xscrollbar.grid(row=rows+1, column=columns, sticky='we')
         
         yscrollbar.config(command=self.my_tree.yview)
         xscrollbar.config(command=self.my_tree.xview)
@@ -184,7 +187,7 @@ class My_Frame(Frame):
 ##    
     def my_dlist_canvas(self,rows,columns,df):
         self.dlist_canvas=Canvas(self,bd=0, highlightthickness=0,bg="yellow")
-        self.dlist_canvas.configure(width=500,height=500)
+        self.dlist_canvas.configure(width=500,height=200)
 
         self.Lframe=Frame(self.dlist_canvas)
         set_option('precision',3)
@@ -212,16 +215,19 @@ class My_Frame(Frame):
 ##            print ('frame width: ',self.Lframe.winfo_width())
         self.data_window=self.dlist_canvas.create_window(0,0,window=self.Lframe,anchor='nw',tags=('data_holder'))
             
-        yscrollbar = ttk.Scrollbar(self, orient='vertical', command=self.dlist_canvas.yview)
-        xscrollbar = ttk.Scrollbar(self, orient='horizontal', command=self.dlist_canvas.xview)
+        self.yscrollbar = ttk.Scrollbar(self, orient='vertical', command=self.dlist_canvas.yview)
+        self.xscrollbar = ttk.Scrollbar(self, orient='horizontal', command=self.dlist_canvas.xview)
         
-        yscrollbar.pack(side=RIGHT,fill=Y)
+        self.yscrollbar.pack(side=RIGHT,fill=Y)
 
-        self.dlist_canvas.config(yscrollcommand = yscrollbar.set)
-        self.dlist_canvas.config(xscrollcommand = xscrollbar.set)  
-        xscrollbar.pack(side=BOTTOM,fill=X)
+        self.dlist_canvas.config(yscrollcommand = self.yscrollbar.set)
+        self.dlist_canvas.config(xscrollcommand = self.xscrollbar.set)  
+        self.xscrollbar.pack(side=BOTTOM,fill=X)
         
         self.dlist_canvas.pack(side=LEFT)
+
+##        self.dlist_canvas.grid(row=rows,column=columns,sticky=W)
+        
     
         self.Lframe.bind("<Configure>", self.OnFrameConfigure)
 ##        self.dlist_canvas.bind('<Configure>', self.FrameWidth)
