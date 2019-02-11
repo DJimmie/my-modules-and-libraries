@@ -86,11 +86,13 @@ class DataWorld():
         
     
     def view_data(self):
-        print(self.the_data.info(),'\n')
-        print('Checking for null values: \n',self.the_data.isnull().sum())
-        print('\n')
-        print(self.the_data.head())
-        print('punk mofo')
+        """***(2-9-2019) Display data headers, data types and the null value counts
+This information is displayed as a dataframe."""
+##        print(self.the_data.info(),'\n')
+##        print('Checking for null values: \n',self.the_data.isnull().sum())
+##        print('\n')
+##        print(self.the_data.head())
+        
 
         headers=[]
         the_types=[]
@@ -127,11 +129,13 @@ class clean_the_data(DataWorld):
         #replacing header dashes with underscores
         self.the_data.columns=self.the_data.columns.str.replace('-','_')
         #replacing header dashes with underscores
-        self.the_data.columns=self.the_data.columns.str.replace('#','number')    
+        self.the_data.columns=self.the_data.columns.str.replace('#','_')    
         #make all headers lower case
         self.the_data.columns=self.the_data.columns.str.lower()
     
-        return self.the_data.info()
+##        return self.the_data.info()
+        self.view_data()
+        return self.the_info
     
     def rename_this_column(self,old,new):
         self.the_data.rename(columns={old:new},inplace=True)
@@ -140,10 +144,27 @@ class clean_the_data(DataWorld):
         if (convert_to=='datetime'):
             self.the_data[the_header]=pd.to_datetime(self.the_data[the_header])
             #the_data[the_header] =  pd.to_datetime(the_data[the_header], format='%d%b%Y:%H:%M:%S.%f')
+            self.view_data()
+            return self.the_info
+
+        if (convert_to=='float'):
+            self.the_data[the_header]=self.the_data[the_header].iloc[0:None].str.replace(',','').astype('float')
+            self.view_data()
+            return self.the_info
+            
+        
             
     def drop_these_columns(self,header_list):
         print(header_list)
         self.the_data.drop(header_list, axis=1,inplace=True)
+
+    def drop_these_rows(self,index_list):
+        print(index_list)
+        self.the_data.drop(index_list, axis=0,inplace=True)
+
+    def drop_these_rows_num_index(self,a,b):
+        print(a,b)
+        self.the_data.drop(self.the_data.index[a:b],inplace=True)
 
 
 # In[ ]:
@@ -156,22 +177,25 @@ class my_datasets(clean_the_data):
     
     def data_subset(self,the_header_list):
         self.subset=self.the_data[the_header_list]
-        
 
-def check_unique(the_data,the_header):
-    the_count=the_data[the_header].value_counts(normalize=False)
-    the_percentage=the_data[the_header].value_counts(normalize=True)
-   
-    unique_test_areas=the_data[the_header].nunique()
-    print('Number of unique: ',unique_test_areas, '\n')
-    print(the_count,' \n')
-    print(the_percentage,' \n')
-    plot_title='Breakdown of '+the_header+' Data'
-    
-    if (unique_test_areas<=7):
-        pie_plot(the_count,plot_title)
-    elif(unique_test_areas>7):
-        Horz_Bar(the_data,the_header)
+    def data_aggregates(self,the_header):
+        agg=self.the_data[the_header].aggregate(['min', 'max','sum','mean','median','std','count'])
+        return agg
+
+    def check_unique(self,the_data,the_header):
+        the_count=the_data[the_header].value_counts(normalize=False)
+        the_percentage=the_data[the_header].value_counts(normalize=True)
+       
+        unique_test_areas=the_data[the_header].nunique()
+        print('Number of unique: ',unique_test_areas, '\n')
+        print(the_count,' \n')
+        print(the_percentage,' \n')
+        plot_title='Breakdown of '+the_header+' Data'
+        
+##        if (unique_test_areas<=7):
+##            pie_plot(the_count,plot_title)
+##        elif(unique_test_areas>7):
+##            Horz_Bar(the_data,the_header)
 
 
 def pie_plot(a,the_title):
