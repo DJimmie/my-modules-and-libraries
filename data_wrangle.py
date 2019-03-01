@@ -38,7 +38,7 @@ class DataWorld():
         self.file_path='Enter the source file path'
         self.what='WTF'
         
-    def get_data(self,source_file,source_file_type):
+    def get_data(self,source_file,source_file_type,**kwargs):
         """RETRIEVING THE DATA in CSV FORMAT"""
         self.source_file=source_file
         self.source_file_type=source_file_type
@@ -47,7 +47,7 @@ class DataWorld():
         self.location=self.file_path+'\\'+self.source_file_name
         
         if (self.source_file_type=='csv'):
-            self.the_data=pd.read_csv(self.location,parse_dates=True)
+            self.the_data=pd.read_csv(self.location,kwargs)
             
         elif(self.source_file_type=='sqlite3' or self.source_file_type=='db'):
             conn=sqlite3.connect(self.location)
