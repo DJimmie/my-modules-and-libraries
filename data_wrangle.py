@@ -25,6 +25,7 @@ import sys
 import sqlite3
 import logging
 import webbrowser
+plt.style.use ('seaborn-whitegrid')
 
 logging.basicConfig(filename='myProgramLog.txt', level=logging.DEBUG, format=' %(asctime)s -%(levelname)s - %(message)s')
 
@@ -223,14 +224,26 @@ class my_datasets(clean_the_data):
         return agg
 
     def check_unique(self,the_data,the_header):
-        the_count=the_data[the_header].value_counts(normalize=False)
-        the_percentage=the_data[the_header].value_counts(normalize=True)
-       
-        unique_test_areas=the_data[the_header].nunique()
-        print('Number of unique: ',unique_test_areas, '\n')
-        print(the_count,' \n')
-        print(the_percentage,' \n')
+        self.the_count=the_data[the_header].value_counts(normalize=False)
+        self.the_percentage=the_data[the_header].value_counts(normalize=True)
+
+
+        my_dict={'freq each '+the_header:self.the_count, 'percentage of total(%)': (self.the_percentage*100)}
+        unique_items=the_data[the_header].nunique()
+
+        unique_results=pd.DataFrame.from_dict(my_dict)
+        print(f'Number of unique {the_header}:',unique_items, '\n')
+        print(unique_results.head(10))
+               
+##        print(self.the_count,' \n')
+##        print(self.the_percentage,' \n')
+
         plot_title='Breakdown of '+the_header+' Data'
+
+        if (unique_items<=7):
+            pie_plot(self.the_count,plot_title)
+        elif(unique_items>7):
+            Horz_Bar(self.the_percentage[0:10]*100,the_header)
 
         plt.figure(figsize=(12,3))
         plt.subplot(1, 3, 1)
@@ -248,10 +261,7 @@ class my_datasets(clean_the_data):
         plt.show()
 
         
-##        if (unique_test_areas<=7):
-##            pie_plot(the_count,plot_title)
-##        elif(unique_test_areas>7):
-##            Horz_Bar(the_data,the_header)
+        
 
 
 def pie_plot(a,the_title):
@@ -263,6 +273,37 @@ def pie_plot(a,the_title):
     plt.axis('tight')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
     plt.show()
+
+def Horz_Bar(a,the_header):
+    
+    logging.info('def Horz_Bar() has been called')
+
+##    data_counts=the_data[the_header].value_counts(normalize=True)
+    
+
+##    y_pos = np.arange(len(data_counts))
+    y_pos = np.arange(len(a))
+
+    x_min=a.min()
+    x_max=a.max()
+
+    
+
+    plt.figure(figsize=(10,15))
+    plt.title('Breakdown of '+the_header)
+    plt.grid()
+    plt.barh(y_pos,a)
+    plt.xlabel('Percentage Breakdown')
+    plt.xlim(x_min,x_max)
+    plt.xscale('linear')
+                       
+    plt.yticks(y_pos,a.index, Rotation=0)
+    plt.ylabel(f'{the_header}')
+    plt.grid()
+    plt.show()
+
+                      
+
 
 
 def data_info(the_data):
