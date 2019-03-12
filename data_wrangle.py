@@ -25,6 +25,8 @@ import sys
 import sqlite3
 import logging
 import webbrowser
+import seaborn as sns
+sns.set(style="whitegrid", color_codes=True)
 plt.style.use ('seaborn-whitegrid')
 
 logging.basicConfig(filename='myProgramLog.txt', level=logging.DEBUG, format=' %(asctime)s -%(levelname)s - %(message)s')
@@ -118,7 +120,7 @@ This information is displayed as a dataframe."""
         self.the_info=pd.DataFrame.from_dict(info_data)
        
    
-
+    
 
 # In[ ]:
 
@@ -223,11 +225,24 @@ class my_datasets(clean_the_data):
         agg=self.the_data[the_header].aggregate(['min', 'max','sum','mean','median','std','count'])
         return agg
 
+    def type_and_null_check(self,the_header):
+        not_null=self.the_data[the_header].notnull().sum()
+        nulls=self.the_data[the_header].isnull().sum()
+        data_type=self.the_data[the_header].dtype
+        info_dict={'non_nulls':not_null,'nulls':nulls,'data_type':data_type}
+        return info_dict
+        
+
     def check_unique(self,the_data,the_header):
+
+        logging.info('def check_unique() has been called')
+        
         self.the_count=the_data[the_header].value_counts(normalize=False)
         self.the_percentage=the_data[the_header].value_counts(normalize=True)
 
-
+##        tnc=type_and_null_check(self,the_data,the_header)
+##        print(tnc,'\n')
+        
         my_dict={'freq each '+the_header:self.the_count, 'percentage of total(%)': (self.the_percentage*100)}
         unique_items=the_data[the_header].nunique()
 
@@ -260,7 +275,55 @@ class my_datasets(clean_the_data):
 
         plt.show()
 
+    def hist_box_kde(self,the_data,the_header):
+        logging.info('def hist_box_kde() has been called')
+
+##        tnc=type_and_null_check(self,the_data,the_header)
+##        print(tnc,'\n')
+        print(the_data[the_header].head(10),'\n')
+
+        the_tabulation=the_data[the_header].aggregate(['min', 'max','sum','mean','median','std','count'])
+        print(the_tabulation)
+        print(the_data[the_header].describe())
+
+        my_dict={'stats':the_tabulation}
+        self.stat_results=pd.DataFrame.from_dict(my_dict)
+        self.stat_results.style.format("{:.2f}")
         
+        print(self.stat_results.style.format("{:.2f}"))
+        
+        # Initialize the plot
+##        fig = plt.figure(figsize=(20,10))
+##        ax1 = fig.add_subplot(131)
+##        ax2 = fig.add_subplot(132)
+##        ax3 = fig.add_subplot(133)
+
+####        ax1.hist(x=the_data[the_header],bins=50)
+####        ax1=sns.distplot(the_data['ydsnet'], hist=True, kde=True, bins=int(180/5), color = 'darkblue', hist_kws={'edgecolor':'black'},kde_kws={'linewidth': 4})
+##        ax3=the_data[the_header].plot(kind='hist')
+##        ax2.violinplot(the_data[the_header])
+        
+##        ax2=the_data[the_header].plot(kind='kde')
+
+##        ax3.boxplot(the_data[the_header])
+##        ax1=the_data[the_header].plot.box()
+
+        fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(20, 10))
+        axes[0].violinplot(the_data['ydsnet'])
+        axes[1].boxplot(the_data['ydsnet'])
+        axes[2]=sns.distplot(the_data['ydsnet'],
+                             hist=True, kde=True,
+                             bins=int(180/5),
+                             color = 'darkblue',
+                             hist_kws={'edgecolor':'black'},
+                             kde_kws={'linewidth': 4})
+        
+        plt.show()
+
+        
+
+        
+
         
 
 
@@ -278,23 +341,17 @@ def Horz_Bar(a,the_header):
     
     logging.info('def Horz_Bar() has been called')
 
-##    data_counts=the_data[the_header].value_counts(normalize=True)
-    
-
-##    y_pos = np.arange(len(data_counts))
     y_pos = np.arange(len(a))
 
     x_min=a.min()
     x_max=a.max()
-
-    
 
     plt.figure(figsize=(10,15))
     plt.title('Breakdown of '+the_header)
     plt.grid()
     plt.barh(y_pos,a)
     plt.xlabel('Percentage Breakdown')
-    plt.xlim(x_min,x_max)
+    plt.xlim(0,x_max)
     plt.xscale('linear')
                        
     plt.yticks(y_pos,a.index, Rotation=0)
