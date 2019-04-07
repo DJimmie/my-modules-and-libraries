@@ -29,6 +29,7 @@ import seaborn as sns
 sns.set(style="whitegrid", color_codes=True)
 plt.style.use ('seaborn-whitegrid')
 
+open("myProgramLog.txt", "w").close()
 logging.basicConfig(filename='myProgramLog.txt', level=logging.DEBUG, format=' %(asctime)s -%(levelname)s - %(message)s')
 
 
@@ -45,7 +46,7 @@ class DataWorld():
         
     def get_data(self,source_file,source_file_type,**csvargs):
         """RETRIEVING THE DATA per the user slection of file type"""
-        logging.info('def get_()data has been called')
+        logging.info('data_wrangle: def get_()data has been called')
         
         self.source_file=source_file
         self.source_file_type=source_file_type
@@ -54,9 +55,11 @@ class DataWorld():
         self.location=self.file_path+'\\'+self.source_file_name
         
         if (self.source_file_type=='csv'):
+            logging.info('data_wrangle: accessing a csv file')
             self.the_data=pd.read_csv(self.location,**csvargs)
             
         elif(self.source_file_type=='sqlite3' or self.source_file_type=='db'):
+            logging.info('data_wrangle: accessing a sqlite database file')
             conn=sqlite3.connect(self.location)
             cur=conn.cursor()
             cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -79,7 +82,7 @@ class DataWorld():
 
     def look_at_SQL(self,sql_table,the_limit=5):
         
-        logging.info('def look_at_SQL() has been called')
+        logging.info('data_wrangle:def look_at_SQL() has been called')
         
         conn=sqlite3.connect(self.location)
         cur=conn.cursor()
@@ -97,7 +100,7 @@ class DataWorld():
     def view_data(self):
         """***(2-9-2019) Display data headers, data types and the null value counts
 This information is displayed as a dataframe."""
-        logging.info('def view_data() has been called')
+        logging.info('data_wrangle:def view_data() has been called')
          
         
 ##        print(self.the_data.info(),'\n')
@@ -130,7 +133,7 @@ class clean_the_data(DataWorld):
     
     def data_clean(self):
         """CLEANING THE HEADERS BY REMOVING SPACES & MAKING ALL LOWER CASE"""
-        logging.info('def data_clean() has been called')
+        logging.info('data_wrangle:def data_clean() has been called')
         #Removed the NaN columns
 
         #All of the columns named UNUSED
@@ -152,12 +155,12 @@ class clean_the_data(DataWorld):
     
     def rename_this_column(self,old,new):
 
-        logging.info('def rename_this_column() has been called')
+        logging.info('data_wrangle:def rename_this_column() has been called')
         self.the_data.rename(columns={old:new},inplace=True)
     
     def convert_data_types(self,the_header,convert_to):
 
-        logging.info('def convert_data_types() has been called')
+        logging.info('data_wrangle:def convert_data_types() has been called')
         
         if (convert_to=='datetime'):
             self.the_data[the_header]=pd.to_datetime(self.the_data[the_header])
@@ -180,7 +183,7 @@ class clean_the_data(DataWorld):
             
     def drop_these_columns(self,header_list):
 
-        logging.info('def drop_these_columns() has been called')
+        logging.info('data_wrangle:def drop_these_columns() has been called')
         print(header_list)
         self.the_data.drop(header_list, axis=1,inplace=True)
 
@@ -194,7 +197,7 @@ class clean_the_data(DataWorld):
 
     def list_the_header_dtypes(self):
 
-        logging.info('def list_the_header_dtypes() has been called')
+        logging.info('data_wrangle:def list_the_header_dtypes() has been called')
         
         headers=self.the_data.columns.tolist()
         object_headers=[]
@@ -235,7 +238,7 @@ class my_datasets(clean_the_data):
 
     def check_unique(self,the_data,the_header):
 
-        logging.info('def check_unique() has been called')
+        logging.info('data_wrangle:def check_unique() has been called')
         
         self.the_count=the_data[the_header].value_counts(normalize=False)
         self.the_percentage=the_data[the_header].value_counts(normalize=True)
@@ -276,7 +279,7 @@ class my_datasets(clean_the_data):
         plt.show()
 
     def hist_box_kde(self,the_data,the_header):
-        logging.info('def hist_box_kde() has been called')
+        logging.info('data_wrangle:def hist_box_kde() has been called')
 
 ##        tnc=type_and_null_check(self,the_data,the_header)
 ##        print(tnc,'\n')
