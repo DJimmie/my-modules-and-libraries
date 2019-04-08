@@ -53,6 +53,9 @@ class DataWorld():
         self.source_file_name=self.source_file+'.'+self.source_file_type
 #         self.location=DataWorld.file_path+'\\'+self.file_name
         self.location=self.file_path+'\\'+self.source_file_name
+        logging.debug(f'data_wrangle: self.source_file_name= {self.source_file_name}')
+        logging.debug(f'data_wrangle: self.file_path= {self.file_path}')
+        logging.debug(f'data_wrangle: self.location= {self.location}')
         
         if (self.source_file_type=='csv'):
             logging.info('data_wrangle: accessing a csv file')
