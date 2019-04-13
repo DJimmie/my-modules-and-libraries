@@ -26,6 +26,7 @@ import sqlite3
 import logging
 import webbrowser
 import seaborn as sns
+import pickle
 sns.set(style="whitegrid", color_codes=True)
 plt.style.use ('seaborn-whitegrid')
 
@@ -78,6 +79,16 @@ class DataWorld():
             self.the_data=pd.read_sql_query("SELECT * FROM "+self.list_of_tables[0],conn)
             cur.close()
             conn.close()
+
+        elif (self.source_file_type=='pickle'):
+            logging.info('data_wrangle: accessing a pickle file')
+            infile = open(self.location,'rb')
+            new_df = pickle.load(infile)
+            infile.close()
+            self.the_data=new_df
+            
+            
+    
             
         pd.options.display.precision=2
 
