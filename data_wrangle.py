@@ -297,17 +297,17 @@ class my_datasets(clean_the_data):
 
 ##        tnc=type_and_null_check(self,the_data,the_header)
 ##        print(tnc,'\n')
-        print(the_data[the_header].head(10),'\n')
+##        print(the_data[the_header].head(10),'\n')
 
         the_tabulation=the_data[the_header].aggregate(['min', 'max','sum','mean','median','std','count'])
         print(the_tabulation)
-        print(the_data[the_header].describe())
+##        print(the_data[the_header].describe())
 
         my_dict={'stats':the_tabulation}
         self.stat_results=pd.DataFrame.from_dict(my_dict)
         self.stat_results.style.format("{:.2f}")
         
-        print(self.stat_results.style.format("{:.2f}"))
+##        print(self.stat_results.style.format("{:.2f}"))
         
         # Initialize the plot
 ##        fig = plt.figure(figsize=(20,10))
@@ -316,7 +316,7 @@ class my_datasets(clean_the_data):
 ##        ax3 = fig.add_subplot(133)
 
 ####        ax1.hist(x=the_data[the_header],bins=50)
-####        ax1=sns.distplot(the_data['ydsnet'], hist=True, kde=True, bins=int(180/5), color = 'darkblue', hist_kws={'edgecolor':'black'},kde_kws={'linewidth': 4})
+####        ax1=sns.distplot(the_data[the_header], hist=True, kde=True, bins=int(180/5), color = 'darkblue', hist_kws={'edgecolor':'black'},kde_kws={'linewidth': 4})
 ##        ax3=the_data[the_header].plot(kind='hist')
 ##        ax2.violinplot(the_data[the_header])
         
@@ -325,10 +325,10 @@ class my_datasets(clean_the_data):
 ##        ax3.boxplot(the_data[the_header])
 ##        ax1=the_data[the_header].plot.box()
 
-        fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(20, 10))
-        axes[0].violinplot(the_data['ydsnet'])
-        axes[1].boxplot(the_data['ydsnet'])
-        axes[2]=sns.distplot(the_data['ydsnet'],
+        fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(10, 5))
+        axes[0].violinplot(the_data[the_header])
+        axes[1].boxplot(the_data[the_header])
+        axes[2]=sns.distplot(the_data[the_header],
                              hist=True, kde=True,
                              bins=int(180/5),
                              color = 'darkblue',
@@ -337,7 +337,7 @@ class my_datasets(clean_the_data):
         
         plt.show()
 
-        
+        return fig
 
         
 
