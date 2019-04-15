@@ -292,6 +292,8 @@ class my_datasets(clean_the_data):
 
         plt.show()
 
+        return unique_results
+
     def hist_box_kde(self,the_data,the_header):
         logging.info('data_wrangle:def hist_box_kde() has been called')
 
@@ -336,8 +338,8 @@ class my_datasets(clean_the_data):
                              kde_kws={'linewidth': 4})
         
         plt.show()
-
-        return fig
+        the_metrics=self.stat_results
+        return fig,the_metrics
 
         
 
