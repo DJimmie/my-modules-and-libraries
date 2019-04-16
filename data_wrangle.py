@@ -339,6 +339,7 @@ class my_datasets(clean_the_data):
         
         plt.show()
         the_metrics=self.stat_results
+##        the_metrics=the_tabulation
         return fig,the_metrics
 
         
