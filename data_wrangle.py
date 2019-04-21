@@ -255,44 +255,74 @@ class my_datasets(clean_the_data):
         logging.info('data_wrangle:def check_unique() has been called')
         
         self.the_count=the_data[the_header].value_counts(normalize=False)
-        self.the_percentage=the_data[the_header].value_counts(normalize=True)
+        self.the_percentage=the_data[the_header].value_counts(normalize=True).round(2)
+        
 
 ##        tnc=type_and_null_check(self,the_data,the_header)
 ##        print(tnc,'\n')
         
-        my_dict={'freq each '+the_header:self.the_count, 'percentage of total(%)': (self.the_percentage*100)}
+        my_dict={'freq'+the_header:self.the_count, '% of Total': (self.the_percentage*100)}
         unique_items=the_data[the_header].nunique()
 
         unique_results=pd.DataFrame.from_dict(my_dict)
         print(f'Number of unique {the_header}:',unique_items, '\n')
         print(unique_results.head(10))
+
+        number_of_items=f'Number of unique {the_header}: {unique_items}'
                
 ##        print(self.the_count,' \n')
 ##        print(self.the_percentage,' \n')
 
         plot_title='Breakdown of '+the_header+' Data'
 
+##        if (unique_items<=7):
+##            pie_plot(self.the_count,plot_title)
+##        elif(unique_items>7):
+##            Horz_Bar(self.the_percentage[0:10]*100,the_header)
+
+
+
+
+##        fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(12, 5))
+        
+        fig = plt.figure(figsize=(12, 5))
+        axes=plt.axes()
+
+        #Pie
         if (unique_items<=7):
-            pie_plot(self.the_count,plot_title)
-        elif(unique_items>7):
-            Horz_Bar(self.the_percentage[0:10]*100,the_header)
+            labels=self.the_count.index
+            axes.set_title(plot_title)
+            axes.pie(self.the_count,labels=labels, autopct='%1.1f%%',shadow=True, startangle=90)
+            axes.axis('equal')
+        else:
+            #Bar
+            a=self.the_percentage[0:10]*100
+            logging.debug(f'data type is: {a.dtype}')
+            y_pos = np.arange(len(a))
+            
 
-        plt.figure(figsize=(12,3))
-        plt.subplot(1, 3, 1)
-        play_count_kde=self.the_data[the_header].value_counts(normalize=False)
-        play_count_kde.plot(kind='kde')
+            x_min=a.min()
+            x_max=a.max()
 
-        plt.subplot(1, 3, 2)
-        play_count_box=self.the_data[the_header].value_counts(normalize=False)
-        play_count_box.plot(kind='box')
+            axes.set_title('Breakdown of '+the_header)
+            axes.grid()
+            axes.barh(y_pos,a,color='blue')
+            axes.set_xlabel('Percentage Breakdown')
+            axes.set_xlim(0,x_max)
+            axes.set_xscale('linear')
+            
+            logging.debug(f'ypos : {y_pos}')                   
+            axes.set_yticks(y_pos)   #y_pos
+            axes.set_ylabel(f'{the_header}')
+            axes.grid()
 
-        plt.subplot(1, 3, 3)
-        play_count_hist=self.the_data[the_header].value_counts(normalize=False)
-        play_count_hist.hist(bins=20)
-
+    
+        plt.tight_layout()
         plt.show()
 
-        return unique_results
+        
+
+        return fig,unique_results,number_of_items
 
     def hist_box_kde(self,the_data,the_header):
         logging.info('data_wrangle:def hist_box_kde() has been called')
@@ -340,7 +370,8 @@ class my_datasets(clean_the_data):
         plt.show()
         the_metrics=self.stat_results
 ##        the_metrics=the_tabulation
-        return fig,the_metrics
+        metrics_frame_header='Parameters'
+        return fig,the_metrics,metrics_frame_header
 
         
 
