@@ -170,6 +170,8 @@ class clean_the_data(DataWorld):
     def rename_this_column(self,old,new):
 
         logging.info('data_wrangle:def rename_this_column() has been called')
+        logging.debug(f'old name: {old}')
+        logging.debug(f'new name: {new}')
         self.the_data.rename(columns={old:new},inplace=True)
     
     def convert_data_types(self,the_header,convert_to):
