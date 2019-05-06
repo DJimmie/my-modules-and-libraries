@@ -360,11 +360,11 @@ class my_datasets(clean_the_data):
 ##        ax1=the_data[the_header].plot.box()
 
         fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(10, 5))
-        axes[0].violinplot(the_data[the_header])
-        axes[1].boxplot(the_data[the_header])
-        axes[2]=sns.distplot(the_data[the_header],
+        axes[0].violinplot(the_data[the_header].dropna())
+        axes[1].boxplot(the_data[the_header].dropna())
+        axes[2]=sns.distplot(the_data[the_header].dropna(),
                              hist=True, kde=True,
-                             bins=int(180/5),
+                             bins=20,
                              color = 'darkblue',
                              hist_kws={'edgecolor':'black'},
                              kde_kws={'linewidth': 4})
