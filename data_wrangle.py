@@ -203,9 +203,14 @@ class clean_the_data(DataWorld):
         print(header_list)
         self.the_data.drop(header_list, axis=1,inplace=True)
 
-    def drop_these_rows(self,index_list):
+    def drop_these_rows_by_index(self,index_list):
         print(index_list)
         self.the_data.drop(index_list, axis=0,inplace=True)
+
+    def drop_these_rows(self,header,header_items):
+        """Filter data by rows per selected data"""
+        logging.info('drop_these_rows() has been called')
+        self.the_data=self.the_data[self.the_data[header].isin(header_items)]
 
     def drop_these_rows_num_index(self,a,b):
         print(a,b)
