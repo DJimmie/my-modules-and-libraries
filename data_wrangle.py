@@ -332,11 +332,9 @@ class my_datasets(clean_the_data):
         return fig,unique_results,number_of_items
 
     def hist_box_kde(self,the_data,the_header):
+        """Creates a tabulated summary and a histogram plot (with kde)
+        on the feature argument."""
         logging.info('data_wrangle:def hist_box_kde() has been called')
-
-##        tnc=type_and_null_check(self,the_data,the_header)
-##        print(tnc,'\n')
-##        print(the_data[the_header].head(10),'\n')
 
         the_tabulation=the_data[the_header].aggregate(['min', 'max','sum','mean','median','std','count'])
         print(the_tabulation)
@@ -346,25 +344,8 @@ class my_datasets(clean_the_data):
         self.stat_results=pd.DataFrame.from_dict(my_dict)
         self.stat_results.style.format("{:.2f}")
         
-##        print(self.stat_results.style.format("{:.2f}"))
-        
-        # Initialize the plot
-##        fig = plt.figure(figsize=(20,10))
-##        ax1 = fig.add_subplot(131)
-##        ax2 = fig.add_subplot(132)
-##        ax3 = fig.add_subplot(133)
-
-####        ax1.hist(x=the_data[the_header],bins=50)
-####        ax1=sns.distplot(the_data[the_header], hist=True, kde=True, bins=int(180/5), color = 'darkblue', hist_kws={'edgecolor':'black'},kde_kws={'linewidth': 4})
-##        ax3=the_data[the_header].plot(kind='hist')
-##        ax2.violinplot(the_data[the_header])
-        
-##        ax2=the_data[the_header].plot(kind='kde')
-
-##        ax3.boxplot(the_data[the_header])
-##        ax1=the_data[the_header].plot.box()
-
         fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(10, 5))
+        fig.suptitle(f'DATA SUMMARY: {the_header}',y=1, fontsize=18,fontweight=40)
         axes[0].violinplot(the_data[the_header].dropna())
         axes[1].boxplot(the_data[the_header].dropna())
         axes[2]=sns.distplot(the_data[the_header].dropna(),
