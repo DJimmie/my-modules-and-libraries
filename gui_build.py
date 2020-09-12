@@ -37,6 +37,12 @@ class UI(Tk):
 
         self.window_width=kwargs['window_width']
 
+        if 'window_height' in kwargs:
+            self.window_height=kwargs['window_height']
+        else:
+            self.window_height=self.winfo_screenheight()
+
+
         self.initialize()
 
         fg='white'
@@ -47,7 +53,7 @@ class UI(Tk):
         """Set-up and configure the UI window"""
     ##        the_window_width=self.winfo_screenwidth()
         the_window_width=self.window_width
-        the_window_height=self.winfo_screenheight()
+        the_window_height=self.window_height
         self.geometry(f'{the_window_width}x{the_window_height}+0+0')
     #         self.attributes('-fullscreen', True)
         self['borderwidth']=4
@@ -111,8 +117,8 @@ class Entries(Tk):
                 self.entry_var=IntVar()
             elif (kwargs['type']=='DoubleVar'):
                 self.entry_var=DoubleVar()
-            elif (kwargs['type']=='StringVar'):
-                self.entry_var=StringVar()
+        else:
+            self.entry_var=StringVar()
         
         if 'state' in kwargs:
             state=kwargs['state']
@@ -148,21 +154,23 @@ class Combos(Tk):
         self.txt=name
         self.combo_label=Label(the_frame,text=self.txt,bg='blue',fg='yellow',font='Ariel 12 bold')
         
-        if (kwargs['type']=='IntVar'):
-            self.combo_var=IntVar()
-        elif (kwargs['type']=='DoubleVar'):
-            self.combo_var=StringVar()
+        if 'type' in kwargs:
+            if (kwargs['type']=='IntVar'):
+                self.combo_var=IntVar()
+            elif (kwargs['type']=='DoubleVar'):
+                self.combo_var=DoubleVar()
         else:
             self.combo_var=StringVar()
 
         if 'state' in kwargs:
             state=kwargs['state']
         else:
-            state='readonly'
+            state=NORMAL
 
         self.combo_box_list=drop_down_list
         self.combo=ttk.Combobox(the_frame,font='Ariel 15 bold',width=field_widths,
-                                   background='yellow',textvariable=self.combo_var,
+                                   background='yellow',
+                                   textvariable=self.combo_var,
                                    values=self.combo_box_list, state=state)
         self.combo_label.grid(row=row,column=col,columnspan=1,pady=1,sticky=W)
         self.combo.grid(row=(row+1),column=col,columnspan=1,pady=1,sticky=W)
