@@ -27,25 +27,25 @@ import os
 import sys
 
 
-def make_barcode(uid,description,barcode_string):
-        """Generate barcode for the UID"""
+def make_barcode(barcodeData,topLabel,bottomLabel):
+        """Generate barcode for the barcodeData"""
         # QRcode option
-        barcode=qrcode.make(uid)
+        barcode=qrcode.make(barcodeData)
 
-        barcode.save(f'image_store_2\{uid}.png')
+        barcode.save(f'C:/my_temp_dirs/{barcodeData}.png')
        
-        labeled_barcode=label_the_barcode(uid,description,barcode_string)
+        labeled_barcode=label_the_barcode(barcodeData,topLabel,bottomLabel)
 
-        labeled_barcode.save(f'image_store_2\{uid}.png')
+        labeled_barcode.save(f'C:/my_temp_dirs/{barcodeData}.png')
 
-        # display_with_mat(f'image_store_2\{uid}.png')
+        # display_with_mat(f'image_store_2\{barcodeData}.png')
 
-        return f'image_store_2\{uid}.png'
+        return f'C:/my_temp_dirs/{barcodeData}.png'
 
-def label_the_barcode(uid,description,barcode_string):
+def label_the_barcode(barcodeData,topLabel,bottomLabel):
     """Writes text on the barcode"""
     # get an image
-    base = Image.open(f'image_store_2\{uid}.png').convert('RGBA')
+    base = Image.open(f'C:/my_temp_dirs/{barcodeData}.png').convert('RGBA')
 
     # make a blank image for the text, initialized to transparent text color
     txt = Image.new('RGBA', base.size, (255,255,255,0))
@@ -58,17 +58,17 @@ def label_the_barcode(uid,description,barcode_string):
     d = ImageDraw.Draw(txt)
 
     # draw text, full opacity
-    d.text((0,0),description, font=fnt1, fill=(0,0,0,255))
+    d.text((0,0),topLabel, font=fnt1, fill=(0,0,0,255))
     
     # draw text, half opacity
-    d.text((50,255),barcode_string, font=fnt, fill=(0,0,0,255))
+    d.text((0,255),bottomLabel, font=fnt, fill=(0,0,0,255))
     
 
     out = Image.alpha_composite(base, txt)
 
     return out
     
-    # out.save(f'image_store_2\{uid}.png')
+    # out.save(f'image_store_2\{barcodeData}.png')
     # out.show()
 
     
@@ -94,6 +94,6 @@ def display_with_mat(photo):
 
 
 
-# barcode_string='1598891997-Fittings'
-# a=make_barcode('1599663550','jd-',barcode_string)
+# bottomLabel='1598891997-Fittings'
+# a=make_barcode('1599663550','jd-',bottomLabel)
 # print(a)

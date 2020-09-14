@@ -26,8 +26,9 @@ def writeTofile(data,filename):
 
 
 def open_directory():
-    """Opens the directory folder for user to access"""    
-    x=filedialog.askopenfilename(initialdir = 'image_store/',title = "Directory",filetypes = (("all files","*.*"),("jpeg files","*.jpg")))
+    """Opens the directory folder for user to access"""  
+
+    x=filedialog.askopenfilename(initialdir = 'C:/my_temp_dirs/',title = "Directory",filetypes = (("all files","*.*"),("jpeg files","*.jpg")))
     print(x)
     pic_file=os.path.basename(x)
 
@@ -43,6 +44,11 @@ def open_directory():
 
 
     # sql_upload_command(pic_file,binary_file_to_upload)
+
+
+def make_temp_directory():
+    pass
+
 
 
 def display_with_mat(photo):

@@ -68,14 +68,17 @@ class SystemGui():
             print (i)
             if (w in i):
                 new_list.append(i)
+            
+        if (len(new_list)!=0):
+            self.my_drop_box.combo['values']=new_list
 
-                self.a=new_list
-                self.my_drop_box.combo_box_list=new_list
         print(self.a)
-        print(self.my_drop_box.combo_box_list)
+        print(self.my_drop_box.combo['values'])
         
 
+        self.my_drop_box.combo.event_generate('<Down>')
 
+        
         
 
 UserInterface()
