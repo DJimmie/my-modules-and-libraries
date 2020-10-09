@@ -3,32 +3,6 @@ import sys
 import configparser
 
 
-def verify_client_folder():
-    """Check for the working directory. If does not exist, then call the class ClientFolder() that creates it."""
-
-    
-
-    # get name of the client program
-    client=os.path.basename(__file__)
-    client_folder_name=client.split('.')[0]
-    print(client_folder_name)
-
-    # search for the C:\\parent_folder\
-    verify=os.path.exists(f'C:\\{client_folder_name}')
-
-    print(verify)
-
-    # if found then return. if not found then call ClientFolder
-
-    if verify==False:
-        client_folder=os.makedirs(f'C:\\{client_folder_name}')
-        return client_folder
-    else:
-        return f'C:\\{client_folder_name}'
-
-
-
-    
 
 class ClientFolder():
     """Creates the client software's parent folder as follows 
@@ -68,18 +42,36 @@ class ClientFolder():
 
 class WorkDirectory():
     """ This is the directory for configuartion files, data storage, temporary folders, etc. """
-    def __init__(self,client_folder):
+    def __init__(self,client_sub_folder,client_folder):
         self.client_folder=client_folder
-        print(self.client_folder)
+        self.client_sub_folder=client_sub_folder
+        print(self.client_sub_folder)
+        self.make()
 
-    def make(self,project):
-        os.makedirs(f'C:\\{client_folder_name}\\{project}')
+    def make(self):
+        os.makedirs(f'C:\\{self.client_folder}\\{self.client_sub_folder}')
 
-
+        
 
 class ConfigFile():
     """Creates client configuration (.ini) files as needed by the client software"""
-    pass
+
+
+    def __init__(self,client_folder):
+
+        self.client_folder=client_folder
+        self.config=configparser.ConfigParser()
+        self.config_defaults()
+
+    def config_defaults(self):
+
+        self.config['DATABASE SERVER']= {'ServerLocation':'path'}
+
+        config_file=f'C:\\{self.client_folder}\\{self.client_folder}.ini'
+        with open(config_file, 'w') as configfile:
+            config.write(configfile)
+
+    
 
 
 # a=ClientFolder()
