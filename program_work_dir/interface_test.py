@@ -9,9 +9,9 @@ print(pwd.ClientFolder.client_folder)
 
 ## Cretating subfolders of the client folder
 
-pwd.WorkDirectory('DD',client_folder=client,)
+# pwd.WorkDirectory('DD',client_folder=client,)
 
 
 ## create config file
 
-pwd.ConfigFile(client)
+# pwd.ConfigFile(client)

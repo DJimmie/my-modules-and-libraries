@@ -33,6 +33,7 @@ class ClientFolder():
 
         if verify==False:
             self.client_folder=os.makedirs(f'C:\\{self.client_folder_name}')
+            ConfigFile(self.client_folder_name)
             return self.client_folder
         else:
             return f'C:\\{self.client_folder_name}'
@@ -49,7 +50,10 @@ class WorkDirectory():
         self.make()
 
     def make(self):
-        os.makedirs(f'C:\\{self.client_folder}\\{self.client_sub_folder}')
+        try:
+            os.makedirs(f'C:\\{self.client_folder}\\{self.client_sub_folder}')
+        except FileExistsError:
+            return
 
         
 
@@ -69,7 +73,7 @@ class ConfigFile():
 
         config_file=f'C:\\{self.client_folder}\\{self.client_folder}.ini'
         with open(config_file, 'w') as configfile:
-            config.write(configfile)
+            self.config.write(configfile)
 
     
 
