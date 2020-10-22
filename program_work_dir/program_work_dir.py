@@ -11,10 +11,11 @@ class ClientFolder():
         -The working directories are created in the WorkDirectory class"""
     
     client_folder=None
-    def __init__(self,client):
+    def __init__(self,client,config_dict):
         # get name of the client program
         self.client=client #os.path.basename(__file__)
         self.client_folder_name=self.client.split('.')[0]
+        self.config_dict=config_dict
         
         ClientFolder.client_folder=self.verify_client_folder()
     
@@ -33,13 +34,36 @@ class ClientFolder():
 
         if verify==False:
             self.client_folder=os.makedirs(f'C:\\{self.client_folder_name}')
-            ConfigFile(self.client_folder_name)
+            ConfigFile(self.client_folder_name,self.config_dict)
             return self.client_folder
         else:
             return f'C:\\{self.client_folder_name}'
 
 
+class ConfigFile():
+    """Creates client configuration (.ini) files as needed by the client software"""
 
+
+    def __init__(self,client_folder,sections):
+
+        self.client_folder=client_folder
+        self.config=configparser.ConfigParser()
+        self.sections=sections
+
+        self.config_defaults()
+        
+    def config_defaults(self):
+
+        for key, value in self.sections.items():
+            print(f"{key}: {value}")
+            # print (value)
+            self.config[key]=value
+         
+        config_file=f'C:\\{self.client_folder}\\{self.client_folder}.ini'
+        with open(config_file, 'w') as configfile:
+            self.config.write(configfile)
+
+    
 
 class WorkDirectory():
     """ This is the directory for configuartion files, data storage, temporary folders, etc. """
@@ -55,27 +79,6 @@ class WorkDirectory():
         except FileExistsError:
             return
 
-        
-
-class ConfigFile():
-    """Creates client configuration (.ini) files as needed by the client software"""
-
-
-    def __init__(self,client_folder):
-
-        self.client_folder=client_folder
-        self.config=configparser.ConfigParser()
-        self.config_defaults()
-
-    def config_defaults(self):
-
-        self.config['DATABASE SERVER']= {'ServerLocation':'path'}
-
-        config_file=f'C:\\{self.client_folder}\\{self.client_folder}.ini'
-        with open(config_file, 'w') as configfile:
-            self.config.write(configfile)
-
-    
 
 
 # a=ClientFolder()
