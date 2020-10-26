@@ -26,18 +26,19 @@ class ClientFolder():
         """Check for the working directory. If does not exist, then call the class ClientFolder() that creates it."""
 
         # search for the C:\\parent_folder\
-        verify=os.path.exists(f'C:\\{self.client_folder_name}')
+        folder_path=f'C:\\my_python_programs\\{self.client_folder_name}'
+        verify=os.path.exists(folder_path)
 
         print(verify)
 
         # if found then return. if not found then call ClientFolder
 
         if verify==False:
-            self.client_folder=os.makedirs(f'C:\\{self.client_folder_name}')
+            self.client_folder=os.makedirs(folder_path)
             ConfigFile(self.client_folder_name,self.config_dict)
             return self.client_folder
         else:
-            return f'C:\\{self.client_folder_name}'
+            return folder_path
 
 
 class ConfigFile():
@@ -59,7 +60,7 @@ class ConfigFile():
             # print (value)
             self.config[key]=value
          
-        config_file=f'C:\\{self.client_folder}\\{self.client_folder}.ini'
+        config_file=f'C:\\my_python_programs\\{self.client_folder}\\{self.client_folder}.ini'
         with open(config_file, 'w') as configfile:
             self.config.write(configfile)
 
@@ -71,14 +72,40 @@ class WorkDirectory():
         self.client_folder=client_folder
         self.client_sub_folder=client_sub_folder
         print(self.client_sub_folder)
-        self.make()
+        return self.make()
+
 
     def make(self):
         try:
-            os.makedirs(f'C:\\{self.client_folder}\\{self.client_sub_folder}')
+            x=os.makedirs(f'C:\\my_python_programs\\{self.client_folder}\\{self.client_sub_folder}')
+            return x
         except FileExistsError:
-            return
+            return 
 
+def add_to_config(the_file,config_params):
+    """Append to config file"""
+    config=configparser.ConfigParser()
+
+    for key, value in config_params.items():
+            print(f"{key}: {value}")
+            # print (value)
+            config[key]=value
+
+    config_file=the_file
+    with open(config_file, 'a') as configfile:
+            config.write(configfile)
+
+
+# def update_config(section,config_file):
+    
+#     config=configparser.ConfigParser()
+
+#     print(f'the section---->{section}')
+#     config[section]['purpose']='TBD'
+
+    
+#     with open(config_file, 'a') as configfile:
+#             config.write(configfile)
 
 
 # a=ClientFolder()

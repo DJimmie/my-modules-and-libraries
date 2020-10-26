@@ -50,6 +50,12 @@ class UI(Tk):
         self.menubar.add_command(label="Instructions",font='ariel',command=None)
         self.config(menu=self.menubar)
 
+    # def menu_build(self):
+    #     self.menubar=Menu(self)
+    #     self.menubar.add_command(label="Create Project",font='ariel',command=None)
+    #     self.config(menu=self.menubar)
+
+
 
     # self.gui_build()
 
