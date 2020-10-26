@@ -27,25 +27,27 @@ import os
 import sys
 
 
-def make_barcode(barcodeData,topLabel,bottomLabel):
+def make_barcode(barcodeData,topLabel,bottomLabel,barcode_folder):
         """Generate barcode for the barcodeData"""
+
+        image_dir=f'{barcode_folder}\\{barcodeData}.png'
         # QRcode option
         barcode=qrcode.make(barcodeData)
 
-        barcode.save(f'C:/my_temp_dirs/{barcodeData}.png')
+        barcode.save(image_dir)
        
-        labeled_barcode=label_the_barcode(barcodeData,topLabel,bottomLabel)
+        labeled_barcode=label_the_barcode(barcodeData,topLabel,bottomLabel,image_dir)
 
-        labeled_barcode.save(f'C:/my_temp_dirs/{barcodeData}.png')
+        labeled_barcode.save(image_dir)
 
         # display_with_mat(f'image_store_2\{barcodeData}.png')
 
-        return f'C:/my_temp_dirs/{barcodeData}.png'
+        return image_dir
 
-def label_the_barcode(barcodeData,topLabel,bottomLabel):
+def label_the_barcode(barcodeData,topLabel,bottomLabel,image_dir):
     """Writes text on the barcode"""
     # get an image
-    base = Image.open(f'C:/my_temp_dirs/{barcodeData}.png').convert('RGBA')
+    base = Image.open(image_dir).convert('RGBA')
 
     # make a blank image for the text, initialized to transparent text color
     txt = Image.new('RGBA', base.size, (255,255,255,0))
@@ -93,7 +95,3 @@ def display_with_mat(photo):
 
 
 
-
-# bottomLabel='1598891997-Fittings'
-# a=make_barcode('1599663550','jd-',bottomLabel)
-# print(a)

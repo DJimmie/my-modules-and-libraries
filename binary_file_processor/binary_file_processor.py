@@ -25,10 +25,10 @@ def writeTofile(data,filename):
     print("Stored blob data into: ", filename)
 
 
-def open_directory():
+def open_directory(the_directory):
     """Opens the directory folder for user to access"""  
 
-    x=filedialog.askopenfilename(initialdir = 'C:/my_temp_dirs/',title = "Directory",filetypes = (("all files","*.*"),("jpeg files","*.jpg")))
+    x=filedialog.askopenfilename(initialdir = the_directory,title = "Directory",filetypes = (("all files","*.*"),("jpeg files","*.jpg")))
     print(x)
     pic_file=os.path.basename(x)
 
