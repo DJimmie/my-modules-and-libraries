@@ -38,7 +38,7 @@ class SystemGui():
         banner_text='Autofill',
         fg='yellow')
 
-        self.a=['Lexi','Lexus','Lice','Love','fog','fire','fly','fluffy','creamy']
+        self.a=['Lexi','Lexus','Lice','Love','fog','fire','fly','fluffy','creamy','saturn','earth','mars','moon','mercury']
 
         self.systemID=gb.Entries(self.j_frame.F,name='SYSTEM',row=1,col=0)
         self.my_drop_box=gb.Combos(self.j_frame.F,name='Type in Here',row=3,col=0,drop_down_list=self.a)
@@ -46,10 +46,11 @@ class SystemGui():
         # self.my_drop_box.combo.focus_set()
         # self.systemID.entry.focus_set()
 
-        # self.my_drop_box.combo.bind("<FocusIn>", lambda x:self.see_what_happens())
+        # self.my_drop_box.combo.bind("<FocusIn>", lambda x: self.dynamic_combo())
         # self.my_drop_box.combo.bind("<Return>", lambda x:self.see_what_happens())
         # self.my_drop_box.combo.bind("<FocusOut>", lambda x:self.see_what_happens())
         self.my_drop_box.combo.bind("<KeyRelease>", lambda x:self.see_what_happens())
+        self.my_drop_box.combo.bind("<KeyPress>", lambda x: self.dynamic_combo())
         # self.my_drop_box.combo.bind("<<ComboboxSelected>>", lambda x:self.see_what_happens())
 
         # self.my_drop_box.combo.validate='key'
@@ -66,17 +67,25 @@ class SystemGui():
         new_list=[]
         for i in self.a:
             print (i)
-            if (w in i):
+            # if (w in i):
+            if (w==i[0:len(w)]):
                 new_list.append(i)
             
         if (len(new_list)!=0):
             self.my_drop_box.combo['values']=new_list
+            self.my_drop_box.combo.event_generate('<Down>')
+            self.my_drop_box.combo.event_generate('<Up>')
 
         print(self.a)
         print(self.my_drop_box.combo['values'])
+
+    def dynamic_combo(self):
+        # self.my_drop_box.combo.event_generate('<Up>')
+        self.my_drop_box.combo.focus_set()
+
         
 
-        self.my_drop_box.combo.event_generate('<Down>')
+       
 
         
         
