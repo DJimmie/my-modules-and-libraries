@@ -94,12 +94,21 @@ class Frames(Tk):
         else:
             font ='Ariel 20 bold'
 
+        if 'rowspan' in kwargs:
+            rowspan=kwargs['rowspan']
+        else:
+            rowspan=1
+        
+        if 'columnspan' in kwargs:
+            columnspan=kwargs['columnspan']
+        else:
+            columnspan=1
 
         self.F=Frame(host)
         self.F['background']=c=kwargs['bg']
         self.F['relief']=kwargs['relief']
         self.F['borderwidth']=5
-        self.F.grid(row=row,column=col,pady=pady,padx=padx,sticky=sticky)
+        self.F.grid(row=row,column=col,pady=pady,padx=padx,sticky=sticky,rowspan=rowspan,columnspan=columnspan)
         banner_text=kwargs['banner_text']
 
         
@@ -109,13 +118,34 @@ class Frames(Tk):
 
 # %%
 class List_box(Tk):
-    def __init__(self,the_frame,name,row,col,fw=10,*args,**kwargs):
+    """Generate List Box"""
+    def __init__(self,the_frame,name,row,col,*args,**kwargs):
         """Create the UI List Box with accompaning labels"""
-        self.list_box_items=kwargs['list_items']
-        font=kwargs['font']
+        
+        if 'list_items' in kwargs:
+            self.list_box_items=kwargs['list_items']
+        else:
+            self.list_box_items=['TBD']
+
+
+        if 'font' in kwargs:
+            font=kwargs['font']
+        else:
+            font='Ariel 12 bold'
+
+        if 'fw' in kwargs:
+            fw=kwargs['fw']
+        else:
+            fw=10
+
+        if 'height' in kwargs:
+            height=kwargs['height']
+        else:
+            height=int(.25*fw)
+
         self.txt=name
         self.list_label=Label(the_frame,text=self.txt,bg='blue',fg='yellow',font='Ariel 12 bold')
-        self.list_box=Listbox(the_frame,font=font, bg='cyan',borderwidth=2,height=int(.25*fw),width=fw,selectmode=SINGLE)
+        self.list_box=Listbox(the_frame,font=font, bg='cyan',borderwidth=2,height=height,width=fw,selectmode=SINGLE)
         
 
         self.list_label.grid(row=row,column=col,columnspan=1,pady=1,sticky=W)
@@ -326,3 +356,13 @@ class Entries(Tk):
                                    background='yellow',textvariable=self.entry_var,highlightbackground='pink',highlightthickness=5,state=state)
         self.entry_label.grid(row=row,column=col,columnspan=1,pady=1,sticky=W)
         self.entry.grid(row=(row+1),column=col,columnspan=1,pady=1,sticky=W)
+
+
+class RadioButtons(Tk):
+    def __init__(self,the_frame,name,row,col,fw=30,*args,**kwargs):
+        """Create the UI radiobuttons with accompaning labels"""
+        field_widths=fw
+        self.txt=name
+        self.radio_label=Label(the_frame,text=self.txt,bg='blue',fg='yellow',font='Ariel 12 bold')
+
+
