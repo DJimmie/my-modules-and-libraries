@@ -33,6 +33,8 @@ class UserInterface():
     Also, when the UI is launched, username is retrieved."""
     logging.info('UserInterface()')
 
+    
+
     def __init__(self):
         """Interface build."""
         gb.UI(None,title='IMAGE MAPPING WITH PYGAME',
@@ -49,6 +51,7 @@ class ImageMapGui():
     """Build the GUI and implement it's methods"""
     logging.info('ImageMapGui()')
 
+    image_gui=None
     def __init__(self):
         self.build_the_gui()
 
@@ -61,18 +64,99 @@ class ImageMapGui():
         fg='yellow',
         sticky=gb.NW)
 
+        self.temporary_frame=gb.Frames(row=2,col=0,bg='brown',relief='raised',
+        banner_font='Ariel 12 bold',
+        banner_text='Display Selection',
+        fg='yellow',
+        sticky=gb.NW)
+
         self.tag=gb.Entries(self.mapping_frame.F,name='Map Object Tag',row=1,col=0)
         self.start_mapping_btn=gb.Buttons(self.mapping_frame.F,name='Start Mapping',row=3,col=0,width=20,command=None,sticky=gb.W,pady=10)
         self.stop_mapping_btn=gb.Buttons(self.mapping_frame.F,name='Stop Mapping',row=3,col=1,width=20,command=None,sticky=gb.E,pady=10)
-        # self.load_image_btn=gb.Buttons(self.gb.UI.w,name='Stop Mapping',row=3,col=1,width=20,command=None,sticky=gb.E,pady=10)
+        self.load_image_btn=gb.Buttons(self.mapping_frame.F,name='Open Map',row=5,col=1,width=20,command=the_map,sticky=gb.W,pady=10)
+
+        self.display_selected=gb.Entries(self.temporary_frame.F,name='Item Selected',row=1,col=0)
+        self.selected_item_info=gb.Textbox(self.temporary_frame.F,name='DESCRIPTION',row=3,col=0,width=30)
 
         
-
-
-
-
-
         
+    def display_the_selection(self,k):
+        self.display_selected.entry.insert(0,k)
+        self.selected_item_info.text_box.insert(gb.INSERT,map_dict[k]['type'])
+        self.selected_item_info.text_box.insert(gb.INSERT,map_dict[k]['uid'])
+
+
+
+# def map_selection(mouse_pos):
+#     # print(f'mouse x pos: {mouse_pos}')
+#     x=mouse_pos[0]
+#     y=mouse_pos[1]
+    
+#     for k,v in map_dict.items():
+#         check=[v['pos'][0]<=x<=v['pos'][1],v['pos'][2]<=y<=v['pos'][3]]
+#         if all(check):
+#             print(f"Map Item is: {k}\nThe items is a {v['type']}")
+#             ImageMapGui().display_the_selection(k)
+#             break
+
+def get_map_file():
+    with open("map_file.json", "r") as read_file:
+        x = json.load(read_file)
+    return x
+
+def the_map():
+
+    global map_dict
+    map_dict=get_map_file()
+
+    pygame.init()
+
+    image=pygame.image.load('manifold.png')
+    image_size=image.get_size()
+
+    w=image_size[0]
+    h=image_size[1]
+
+    global screen
+    screen = pygame.display.set_mode((w, h))
+    pygame.display.set_caption('Manifold')
+
+    screen.blit(image, (0, 0))
+
+    rect=image.get_rect()
+    # print(f'image size:{image.get_size()}')
+    # print(f'rect: {rect}')
+    #Add this before loop.
+    clock = pygame.time.Clock()
+
+    done = False
+
+    while not done:
+
+        #Add this in loop.
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+        
+        if pygame.mouse.get_pressed()[0]:
+            # map_selection(pygame.mouse.get_pos())
+
+            mouse_pos=pygame.mouse.get_pos()
+            x=mouse_pos[0]
+            y=mouse_pos[1]
+            
+            for k,v in map_dict.items():
+                check=[v['pos'][0]<=x<=v['pos'][1],v['pos'][2]<=y<=v['pos'][3]]
+                if all(check):
+                    print(f"Map Item is: {k}\nThe items is a {v['type']}")
+                    ImageMapGui().display_the_selection(k)
+                    done=True
+                    pygame.display.quit()
+                    break
+        
+
+        pygame.display.flip()
 
 
 ## FUNCTIONS--------------------------FUNCTIONS--------------------------FUNCTIONS
@@ -96,4 +180,7 @@ def exit_operations():
 if __name__ == '__main__':
 
     UserInterface()
+
+    
+
 
