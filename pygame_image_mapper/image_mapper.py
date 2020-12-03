@@ -155,8 +155,11 @@ def the_map():
                     pygame.display.quit()
                     break
         
-
-        pygame.display.flip()
+        if done:
+            break
+        else:       
+            pygame.display.flip()
+        
 
 
 ## FUNCTIONS--------------------------FUNCTIONS--------------------------FUNCTIONS
