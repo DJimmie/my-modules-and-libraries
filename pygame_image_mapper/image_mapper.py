@@ -82,22 +82,9 @@ class ImageMapGui():
         
     def display_the_selection(self,k):
         self.display_selected.entry.insert(0,k)
-        self.selected_item_info.text_box.insert(gb.INSERT,map_dict[k]['type'])
+        self.selected_item_info.text_box.insert(gb.INSERT,f"{map_dict[k]['type']}\n")
         self.selected_item_info.text_box.insert(gb.INSERT,map_dict[k]['uid'])
 
-
-
-# def map_selection(mouse_pos):
-#     # print(f'mouse x pos: {mouse_pos}')
-#     x=mouse_pos[0]
-#     y=mouse_pos[1]
-    
-#     for k,v in map_dict.items():
-#         check=[v['pos'][0]<=x<=v['pos'][1],v['pos'][2]<=y<=v['pos'][3]]
-#         if all(check):
-#             print(f"Map Item is: {k}\nThe items is a {v['type']}")
-#             ImageMapGui().display_the_selection(k)
-#             break
 
 def get_map_file():
     with open("map_file.json", "r") as read_file:
@@ -127,17 +114,20 @@ def the_map():
     # print(f'image size:{image.get_size()}')
     # print(f'rect: {rect}')
     #Add this before loop.
-    clock = pygame.time.Clock()
+    
 
-    done = False
 
-    while not done:
+    running = False
+
+    while not running:
 
         #Add this in loop.
-        clock.tick(60)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                done = True
+                running = True
+
+            map_funct(event)
         
         if pygame.mouse.get_pressed()[0]:
             # map_selection(pygame.mouse.get_pos())
@@ -151,11 +141,13 @@ def the_map():
                 if all(check):
                     print(f"Map Item is: {k}\nThe items is a {v['type']}")
                     ImageMapGui().display_the_selection(k)
-                    done=True
+                    running=True
                     pygame.display.quit()
                     break
+
         
-        if done:
+        
+        if running:
             break
         else:       
             pygame.display.flip()
@@ -163,6 +155,50 @@ def the_map():
 
 
 ## FUNCTIONS--------------------------FUNCTIONS--------------------------FUNCTIONS
+
+def map_funct(event):
+    global mapping,x_list,y_list
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+        if mapping==False:
+            mapping=True
+            x_list=[]
+            y_list=[]
+        else:
+            mapping=False
+            
+    if mapping==True and event.type == pygame.MOUSEMOTION:
+        mouse_position=pygame.mouse.get_pos()
+        print ('mouse position', mouse_position)
+        x_list.append(mouse_position[0]) 
+        y_list.append(mouse_position[1]) 
+
+        update_the_dict()
+        return
+
+def update_the_dict():
+
+    """Map (assign) the image object to a position. This is done one item at a time via user prompt"""
+
+    x_max=max(x_list)
+    x_min=min(x_list)
+
+    y_max=max(y_list)
+    y_min=min(y_list)
+
+    print((x_min,x_max))
+    print((y_min,y_max))
+    name='Pump'
+    map_dict[name]={'pos':(x_min,x_max,y_min,y_max),'type':'TBA','uid':'TBD'}
+    save_map_dict(map_dict)
+    
+    print(map_dict)
+    return
+
+def save_map_dict(map_file):
+    with open('map_file.json', "w") as write_file:
+        json.dump(map_file, write_file)
+
+
 def get_config_values(section,option):
     """Used to retrieve values from the program's configuration file."""
     config=pwd.configparser.ConfigParser()
@@ -181,6 +217,9 @@ def exit_operations():
 
 ## MAIN-----------------MAIN-----------------MAIN
 if __name__ == '__main__':
+
+    global mapping
+    mapping=False
 
     UserInterface()
 
