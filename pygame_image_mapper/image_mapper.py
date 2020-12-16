@@ -6,12 +6,6 @@ import json
 import os
 import sys
 import logging
-# try:
-#     import tkinter.ttk
-#     from tkinter import *
-# #     from tkinter.ttk import *
-# except:
-#     from tkinter import *
 
 from tkinter import messagebox
 
@@ -26,6 +20,9 @@ ini_file=f'c:/my_python_programs/{client}/{client}.ini'
 log_file=f'c:/my_python_programs/{client}/{client}_log.log'
 logging.basicConfig(filename=log_file, level=logging.INFO, filemode='w', format=' %(asctime)s -%(levelname)s - %(message)s')
 logging.info('Start')
+
+pygame.init()
+
 
 class UserInterface():
     """Parent class for the UI. Instantiates the composit Window.
@@ -70,10 +67,11 @@ class ImageMapGui():
         fg='yellow',
         sticky=gb.NW)
 
-        self.tag=gb.Entries(self.mapping_frame.F,name='Map Object Tag',row=1,col=0)
-        self.start_mapping_btn=gb.Buttons(self.mapping_frame.F,name='Start Mapping',row=3,col=0,width=20,command=None,sticky=gb.W,pady=10)
-        self.stop_mapping_btn=gb.Buttons(self.mapping_frame.F,name='Stop Mapping',row=3,col=1,width=20,command=None,sticky=gb.E,pady=10)
-        self.load_image_btn=gb.Buttons(self.mapping_frame.F,name='Open Map',row=5,col=1,width=20,command=the_map,sticky=gb.W,pady=10)
+        self.tag=gb.Entries(self.mapping_frame.F,name='Item',row=1,col=0)
+        self.uid=gb.Entries(self.mapping_frame.F,name='Assigned UID',row=3,col=0)
+        self.start_mapping_btn=gb.Buttons(self.mapping_frame.F,name='Start Mapping',row=5,col=0,width=20,command=None,sticky=gb.W,pady=10)
+        self.stop_mapping_btn=gb.Buttons(self.mapping_frame.F,name='Stop Mapping',row=5,col=1,width=20,command=None,sticky=gb.E,pady=10)
+        self.load_image_btn=gb.Buttons(self.mapping_frame.F,name='Open Map',row=7,col=1,width=20,command=the_map,sticky=gb.W,pady=10)
 
         self.display_selected=gb.Entries(self.temporary_frame.F,name='Item Selected',row=1,col=0)
         self.selected_item_info=gb.Textbox(self.temporary_frame.F,name='DESCRIPTION',row=3,col=0,width=30)
@@ -96,7 +94,7 @@ def the_map():
     global map_dict
     map_dict=get_map_file()
 
-    pygame.init()
+    # pygame.init()
 
     image=pygame.image.load('manifold.png')
     image_size=image.get_size()
@@ -115,7 +113,7 @@ def the_map():
     # print(f'rect: {rect}')
     #Add this before loop.
     
-
+    
 
     running = False
 
@@ -128,6 +126,7 @@ def the_map():
                 running = True
 
             map_funct(event)
+
         
         if pygame.mouse.get_pressed()[0]:
             # map_selection(pygame.mouse.get_pos())
@@ -188,10 +187,24 @@ def update_the_dict():
     print((x_min,x_max))
     print((y_min,y_max))
     name='Pump'
+
+    draw_item_border((x_min,x_max,y_min,y_max))
+
     map_dict[name]={'pos':(x_min,x_max,y_min,y_max),'type':'TBA','uid':'TBD'}
     save_map_dict(map_dict)
     
-    print(map_dict)
+    # print(map_dict)
+    return
+
+def draw_item_border(b):
+    print(b)
+    w=b[1]-b[0]
+    h=b[3]-b[2]
+
+    border=pygame.Rect(b[0],b[2],w, h)
+    pygame.draw.rect(screen, (255,0,0), border,2)
+    # rect = Rect(b[0],b[3],w, h)
+    
     return
 
 def save_map_dict(map_file):
