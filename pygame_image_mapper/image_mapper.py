@@ -87,9 +87,9 @@ class ImageMapGui():
 
 
 
-
-        self.tag=gb.Entries(self.mapping_frame.F,name='Item',row=1,col=0)
-        self.uid=gb.Entries(self.mapping_frame.F,name='Assigned UID',row=3,col=0)
+        self.image_list=gb.Combos(self.mapping_frame.F,name='List of Images',row=1,col=0,drop_down_list=ImageMapGui.img_chk())
+        self.tag=gb.Entries(self.mapping_frame.F,name='Item',row=3,col=0)
+        self.uid=gb.Entries(self.mapping_frame.F,name='Assigned UID',row=5,col=0)
         # self.start_mapping_btn=gb.Buttons(self.mapping_frame.F,name='Start Mapping',row=5,col=0,width=20,command=None,sticky=gb.W,pady=10)
         # self.stop_mapping_btn=gb.Buttons(self.mapping_frame.F,name='Stop Mapping',row=5,col=1,width=20,command=None,sticky=gb.E,pady=10)
         self.load_image_btn=gb.Buttons(self.mapping_frame.F,name='Open Map',row=7,col=1,width=20,command=self.get_map_values,sticky=gb.W,pady=10)
@@ -100,6 +100,10 @@ class ImageMapGui():
         # self.read_option=gb.CheckBoxes(self.options_frame.F,name='Read Map',check_label='Read Map',row=1,col=0,command=None)
         self.map_option=gb.CheckBoxes(self.options_frame.F,name='Build Map',check_label='Build Map',row=2,col=0,command=None)
 
+    @staticmethod
+    def img_chk():
+        l=[x for x in os.listdir(os.curdir) if os.path.splitext(x)[1]=='.PNG']
+        return l
     
     def display_the_selection(self,k):
         """Display selected items"""
