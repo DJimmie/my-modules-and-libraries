@@ -29,6 +29,7 @@ class UI(Tk):
         self.window_colors=kwargs["win_color"]
         self.title(kwargs["title"])
         self.window_width=kwargs["window_width"]
+        self.menubar=Menu(self)
         self.initialize()
 
         fg='white'
@@ -45,15 +46,15 @@ class UI(Tk):
 #         self.attributes('-fullscreen', True)
         self['borderwidth']=4
         self['bg']=self.window_colors
-        self.menubar=Menu(self)
+        # self.menubar=Menu(self)
         self.menubar.add_command(label="Exit",font='ariel',command=self.bye_bye)
         self.menubar.add_command(label="Instructions",font='ariel',command=None)
         self.config(menu=self.menubar)
 
-    # def menu_build(self):
-    #     self.menubar=Menu(self)
-    #     self.menubar.add_command(label="Create Project",font='ariel',command=None)
-    #     self.config(menu=self.menubar)
+    def menu_build(self):
+        # self.menubar=Menu(self)
+        self.menubar.add_command(label="Create Project",font='ariel',command=None)
+        self.config(menu=self.menubar)
 
 
 
@@ -202,6 +203,8 @@ class CheckBoxes(Tk):
     def __init__(self,the_frame,name,check_label,row,col,command,*args,**kwargs):
         """Create the UI Checkbox Box with accompaning labels"""
         
+        self.check_box_label=Label(the_frame,text=name,bg='blue',fg='yellow',font='Ariel 12 bold')
+
         self.var=IntVar()
         self.check_box=Checkbutton(master=the_frame,
         text=check_label,
@@ -212,7 +215,8 @@ class CheckBoxes(Tk):
         font='Ariel 15 bold',
         variable=self.var,
         command=command)
-       
+
+        self.check_box_label.grid(row=row,column=col,columnspan=1,pady=1,sticky=W)
         self.check_box.grid(row=(row+1),column=col,pady=1,sticky=W)
 
 class Labels(Tk):
@@ -359,10 +363,42 @@ class Entries(Tk):
 
 
 class RadioButtons(Tk):
-    def __init__(self,the_frame,name,row,col,fw=30,*args,**kwargs):
+    def __init__(self,the_frame,name,row,col,radio_dict,*args,**kwargs):
         """Create the UI radiobuttons with accompaning labels"""
-        field_widths=fw
+        # field_widths=fw
+
+        if 'bg' in kwargs:
+            bg=kwargs['bg']
+        else:
+            bg='blue'
+
+        if 'fg' in kwargs:
+            fg=kwargs['fg']
+        else:
+            fg='yellow'
+
+        if 'font' in kwargs:
+            font=kwargs['fg']
+        else:
+            font='Ariel 12 bold'
+
+
         self.txt=name
-        self.radio_label=Label(the_frame,text=self.txt,bg='blue',fg='yellow',font='Ariel 12 bold')
+        self.radio_label=Label(the_frame,text=self.txt,bg=bg,fg=fg,font='Ariel 12 bold')
+        self.radio_label.grid(row=row,column=col,columnspan=1,pady=1,sticky=W)
+        row+=1
+        for key, val in radio_dict.items():
+                self.radio=Radiobutton(the_frame, 
+                        text=key,
+                        padx = 20, 
+                        variable=None, 
+                        command=None,
+                        value=val,bg=bg,fg=fg,
+                        font=font)
+                    
+                print(row)
+                self.radio.grid(row=(row),column=col,columnspan=1,pady=1,sticky=W)
+                row+=1
 
 
+    
