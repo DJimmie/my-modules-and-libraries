@@ -184,6 +184,23 @@ class Textbox(Tk):
         else:
             state=NORMAL
 
+        if 'sticky' in kwargs:
+            sticky=kwargs['sticky']
+        else:
+            sticky=W
+
+        if 'pady' in kwargs:
+            pady=kwargs['pady']
+        else:
+            pady=1
+
+        if 'padx' in kwargs:
+            padx=kwargs['padx']
+        else:
+            padx=1
+
+        
+
         self.text_box_label=Label(the_frame,text=name,bg='blue',fg='yellow',font='Ariel 12 bold')
 
         self.text_box=Text(the_frame,
@@ -194,8 +211,11 @@ class Textbox(Tk):
         wrap=WORD,
         state=state)
 
-        self.text_box_label.grid(row=row,column=col,columnspan=1,pady=1,sticky=W)
-        self.text_box.grid(row=(row+1),column=col,columnspan=1,pady=1,sticky=W)
+        self.text_box_label.grid(row=row,column=col,columnspan=1,pady=pady,sticky=sticky)
+        self.text_box_label.update()
+        p=self.text_box_label.winfo_reqheight()
+        self.text_box.update()
+        self.text_box.grid(row=(row+0),column=col,columnspan=1,pady=pady+p,sticky=sticky)
 
 
 class CheckBoxes(Tk):
@@ -382,6 +402,13 @@ class RadioButtons(Tk):
         else:
             font='Ariel 12 bold'
 
+        self.var = IntVar()
+
+        if 'type' in kwargs:
+            if (kwargs['type']=='StringVar'):
+                self.var=StringVar()
+        else:
+            self.var=IntVar()
 
         self.txt=name
         self.radio_label=Label(the_frame,text=self.txt,bg=bg,fg=fg,font='Ariel 12 bold')
@@ -391,12 +418,14 @@ class RadioButtons(Tk):
                 self.radio=Radiobutton(the_frame, 
                         text=key,
                         padx = 20, 
-                        variable=None, 
+                        variable=self.var, 
                         command=None,
-                        value=val,bg=bg,fg=fg,
+                        value=val,
+                        bg=bg,fg=fg,
+                        selectcolor='navy',
                         font=font)
                     
-                print(row)
+                # print(row)
                 self.radio.grid(row=(row),column=col,columnspan=1,pady=1,sticky=W)
                 row+=1
 
