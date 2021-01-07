@@ -22,7 +22,7 @@ logging.basicConfig(filename=log_file, level=logging.INFO, filemode='w', format=
 logging.info('Start')
 
 
-base_name='cranes'
+base_name='manifold'
 image_filename=f'{base_name}.png'
 json_filename=f'{base_name}.json'
 
