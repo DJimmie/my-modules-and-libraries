@@ -22,7 +22,7 @@ logging.basicConfig(filename=log_file, level=logging.INFO, filemode='w', format=
 logging.info('Start')
 
 
-base_name='manifold'
+base_name='npt_fittings_mind_map'
 image_filename=f'{base_name}.png'
 json_filename=f'{base_name}.json'
 
